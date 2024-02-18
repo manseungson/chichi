@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Items</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h2>Delete Items</h2>
+        <div id="itemsList" class="mt-3"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4wDe3il5-uogn1mFfldPQJ9WhFiZavyE",
+            authDomain: "chichi-e533c.firebaseapp.com",
+            projectId: "chichi-e533c",
+            storageBucket: "chichi-e533c.appspot.com",
+            messagingSenderId: "1098273979726",
+            appId: "1:1098273979726:web:e22ddec39e28457d21f21f",
+            measurementId: "G-CSBDZJVE1Z"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function deleteItem(itemId) {
+            db.collection('menu').doc(itemId).delete().then(() => {
+                alert('Item successfully deleted!');
+                document.getElementById(`item-${itemId}`).remove(); // Remove item from the list
+            }).catch((error) => {
+                console.error("Error removing document: ", error);
+            });
+        }
+
+        db.collection('menu').get().then((snapshot) => {
+            snapshot.forEach((doc) => {
+                const item = doc.data();
+                const itemElement = document.createElement('div');
+                itemElement.id = `item-${doc.id}`;
+                itemElement.innerHTML = `
+                <div class="card mb-3">
+                    <img src="${item.이미지}" class="card-img-top" alt="Item Image">
+                    <div class="card-body">
+                        <h5 class="card-title">${item.제목}</h5>
+                        <p class="card-text">${item.소개}</p>
+                        <button class="btn btn-danger" onclick="deleteItem('${doc.id}')">Delete</button>
+                    </div>
+                </div>
+            `;
+                document.getElementById('itemsList').appendChild(itemElement);
+            });
+        }).catch((error) => {
+            console.error("Error getting documents: ", error);
+        });
+    </script>
+
+</body>
+
+</html>

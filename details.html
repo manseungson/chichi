@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>치치 디테일</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index.html">CHICHI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/upload.html">Insert Drink</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>치치 디테일</h2>
+        <div id="itemDetails" class="mt-3"></div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4wDe3il5-uogn1mFfldPQJ9WhFiZavyE",
+            authDomain: "chichi-e533c.firebaseapp.com",
+            projectId: "chichi-e533c",
+            storageBucket: "chichi-e533c.appspot.com",
+            messagingSenderId: "1098273979726",
+            appId: "1:1098273979726:web:e22ddec39e28457d21f21f",
+            measurementId: "G-CSBDZJVE1Z"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const itemId = urlParams.get('id');
+
+        function renderItemDetails(item) {
+            const itemDetails = document.getElementById('itemDetails');
+            itemDetails.innerHTML = `
+            <div class="card mb-3">
+                <img src="${item.이미지}" class="card-img-top" alt="Item Image">
+                <div class="card-body">
+                    <h5 class="card-title">${item.제목}</h5>
+                    <p class="card-text">${item.소개}</p>
+                </div>
+            </div>
+        `;
+        }
+
+        if (itemId) {
+            db.collection('menu').doc(itemId).get().then(doc => {
+                if (doc.exists) {
+                    renderItemDetails(doc.data());
+                } else {
+                    document.getElementById('itemDetails').innerHTML = '<p>Item not found.</p>';
+                }
+            }).catch((error) => {
+                console.error("Error getting document:", error);
+                document.getElementById('itemDetails').innerHTML = '<p>Error loading item details.</p>';
+            });
+        } else {
+            document.getElementById('itemDetails').innerHTML = '<p>No item ID provided.</p>';
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha384-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
