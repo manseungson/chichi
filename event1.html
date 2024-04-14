@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>룰렛 이벤트</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #000; /* 배경색을 검은색으로 설정 */
+            color: #fff; /* 글자색을 흰색으로 설정하여 가독성 확보 */
+        }
+
+        canvas {
+            display: block;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 50%; /* Make canvas round */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Add shadow for better visibility */
+            background-size: 100% 100%; /* 이미지를 캔버스에 꽉 채우도록 설정 */
+            /* background-repeat: no-repeat;
+            background-position: center; */
+            width: 100%; /* 반응형 너비 */
+            max-width: 300px; /* 최대 너비 */
+            height: 300px; /* 가로 세로 비율 유지 */
+        }
+
+        .input-group {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+
+        /* Additional styles to ensure that the canvas doesn't have any unexpected borders */
+        .canvas-container {
+            border: none; /* Ensuring that the parent container also has no border */
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="text-center">룰렛 이벤트</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center canvas-container">
+                <canvas id='rouletteCanvas'></canvas>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="사번을 입력해주세요." id="employeeId">
+                    <button class="btn btn-primary" type="button" id="spinRoulette">룰렛 돌리기</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase JS SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics-compat.js"></script>
+
+    <script>
+        // Initialize Firebase with your Firebase configuration
+        firebase.initializeApp({
+            apiKey: "AIzaSyA4wDe3il5-uogn1mFfldPQJ9WhFiZavyE",
+            authDomain: "chichi-e533c.firebaseapp.com",
+            projectId: "chichi-e533c",
+            storageBucket: "chichi-e533c.appspot.com",
+            messagingSenderId: "1098273979726",
+            appId: "1:1098273979726:web:e22ddec39e28457d21f21f",
+            measurementId: "G-CSBDZJVE1Z"
+        });
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+    </script>
+    <script src="roulette.js"></script>
+</body>
+
+</html>
